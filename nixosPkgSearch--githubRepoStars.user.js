@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         NixOS Package Search - GitHub repo stargazers badges for package search results
-// @namespace    http://tampermonkey.net/
-// @version      2024-07-29
-// @description  Display the number of GitHub repo stars for every (applicable) Nix package returned in the search results.
+// @namespace    https://github.com/m1kethai/UserScripts
+// @version      1.0
+// @description  Adds a badge displaying the number of GitHub repo stars for every Nix package (with a GitHub repo "Homepage") returned in the package search results.
 // @author       m1kethai
 // @match        https://search.nixos.org/packages*type=packages*query=*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nixos.org
