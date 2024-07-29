@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name         NixOS Package Search - GitHub repo stargazers badges for package search results
 // @namespace    https://github.com/m1kethai/UserScripts
+// @supportURL    https://github.com/m1kethai/UserScripts
 // @version      1.0
 // @description  Adds a badge displaying the number of GitHub repo stars for every Nix package (with a GitHub repo "Homepage") returned in the package search results.
 // @author       m1kethai
