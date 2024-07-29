@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NixOS Package Search - GitHub repo stargazers badges for package search results
 // @namespace    https://github.com/m1kethai/UserScripts
-// @supportURL    https://github.com/m1kethai/UserScripts
+// @supportURL   https://github.com/m1kethai/UserScripts
 // @version      1.0
 // @description  Adds a badge displaying the number of GitHub repo stars for every Nix package (with a GitHub repo "Homepage") returned in the package search results.
 // @author       m1kethai
@@ -36,7 +36,6 @@
     const getPkgGithubRepos = async () => {
         const allPkgHomepageLinks = document.querySelectorAll(pkgHomepageLinkSelector);
         const githubRepoLinks = Array.from(allPkgHomepageLinks).filter(link => link.href.includes("github.com"));
-        console.table("🚀 ~ getPkgGithubRepos ~ githubRepoLinks:", githubRepoLinks);
         return githubRepoLinks;
     };
 
@@ -52,7 +51,6 @@
 
     async function addGithubRepoStarBadgesToPkgResults() {
         const repoLinkList = await getPkgGithubRepos();
-
         for (const repoLinkEl of repoLinkList) {
             const
                 starsBadgeText = await fetchGithubRepoStars(repoLinkEl),
@@ -73,6 +71,5 @@
         }
     };
 
-    if (document.readyState === "complete") addGithubRepoStarBadgesToPkgResults();
-    else document.addEventListener("DOMContentLoaded", addGithubRepoStarBadgesToPkgResults);
+    addGithubRepoStarBadgesToPkgResults();
 })();
