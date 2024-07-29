@@ -13,6 +13,24 @@
     'use strict';
 
     const pkgHomepageLinkSelector = `div.search-page.success > div.search-results > div > ul > li.package > ul > li:nth-child(3) > a`;
+    const styles = {
+        badgeEl: `
+            display: inherit;
+            margin-left: 1em;
+            padding: 0.04em 0.6em 0.04em 0.4em;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.2s;
+        `,
+        badgeText: `
+            color: white;
+            text-decoration: none !important;
+            transition: all 0.2s;
+        `
+    };
 
     const getPkgGithubRepos = async () => {
         const allPkgHomepageLinks = document.querySelectorAll(pkgHomepageLinkSelector);
@@ -20,17 +38,6 @@
         console.table("🚀 ~ getPkgGithubRepos ~ githubRepoLinks:", githubRepoLinks);
         return githubRepoLinks;
     };
-
-    const badgeStyles = `
-        display: inherit;
-        margin-left: 1em;
-        padding: 0.08em 0.6em 0.08em 0.4em;
-        background-color: rgba(255, 255, 255, 0.13);
-        border-radius: 4px;
-        font-size: 0.8em;
-        font-weight: bold;
-        text-align: center;
-    `;
 
     async function fetchGithubRepoStars(ghRepoLink) {
         const
@@ -51,12 +58,13 @@
                 starsBadge = document.createElement("li"),
                 starsLink = document.createElement("a");
 
-            starsBadge.classList.add("repo-stars-badge");
+            starsBadge.classList.add("github-stargazers-badge");
             starsBadge.appendChild(starsLink);
-            starsBadge.style = badgeStyles;
+
+            starsBadge.style = styles.badgeEl;
+            starsLink.style = styles.badgeText;
 
             starsLink.textContent = starsBadgeText;
-            starsLink.style = "color: white;";
             starsLink.target = "_blank";
             starsLink.href = repoLinkEl.href;
 
