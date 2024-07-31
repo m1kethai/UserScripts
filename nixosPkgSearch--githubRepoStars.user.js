@@ -2,7 +2,7 @@
 // @name         NixOS Package Search - GitHub repo stargazers badges for package search results
 // @namespace    https://github.com/m1kethai/UserScripts
 // @supportURL   https://github.com/m1kethai/UserScripts
-// @version      1.0
+// @version      1.1
 // @description  Adds a badge displaying the number of GitHub repo stars for every Nix package (with a GitHub repo "Homepage") returned in the package search results.
 // @author       m1kethai
 // @match        https://search.nixos.org/packages*type=packages*query=*
@@ -12,8 +12,6 @@
 
 (function() {
     'use strict';
-
-    const pkgHomepageLinkSelector = `div.search-page.success > div.search-results > div > ul > li.package > ul > li:nth-child(3) > a`;
     const styles = {
         badgeEl: `
             display: inherit;
@@ -33,10 +31,13 @@
         `
     };
 
-    const getPkgGithubRepos = async () => {
-        const allPkgHomepageLinks = document.querySelectorAll(pkgHomepageLinkSelector);
-        const githubRepoLinks = Array.from(allPkgHomepageLinks).filter(link => link.href.includes("github.com"));
-        return githubRepoLinks;
+    async function pkgsWithGhRepoHomepages() {
+        const homepageLinkSelector = `div.search-page.success > div.search-results > div > ul > li.package > ul > li > a`;
+        const homepageLinks = document.querySelectorAll(homepageLinkSelector);
+        const githubRepoHomepages = Array.from(homepageLinks).filter(link => link.innerText.includes("Homepage") && link.href.includes ("github.com") && !link.href.includes("blob"));
+
+        console.info(`🚀 ~ githubRepoHomepages:`, githubRepoHomepages)
+        return githubRepoHomepages;
     };
 
     async function fetchGithubRepoStars(ghRepoLink) {
@@ -46,29 +47,30 @@
             response = await fetch(apiUrl),
             data = await response.json(),
             gazers = data.stargazers_count;
-        return `⭐️ ${gazers || "??"}`;
+
+        return `⭐️ ${gazers || "???"}`;
     };
 
+    const createBadgeElements = repoLinkList => repoLinkList.map(repoLink => {
+        const starsBadge = document.createElement("li"), starsLink = document.createElement("a");
+        starsBadge.appendChild(starsLink);
+        starsBadge.style = styles.badgeEl;
+        starsLink.style = styles.badgeText;
+        starsLink.target = "_blank";
+        starsLink.href = repoLink.href;
+        return starsBadge;
+    });
+
     async function addGithubRepoStarBadgesToPkgResults() {
-        const repoLinkList = await getPkgGithubRepos();
-        for (const repoLinkEl of repoLinkList) {
-            const
-                starsBadgeText = await fetchGithubRepoStars(repoLinkEl),
-                starsBadge = document.createElement("li"),
-                starsLink = document.createElement("a");
+        const repoLinkList = await pkgsWithGhRepoHomepages();
+        // debugger;
 
-            starsBadge.classList.add("github-stargazers-badge");
-            starsBadge.appendChild(starsLink);
-
-            starsBadge.style = styles.badgeEl;
-            starsLink.style = styles.badgeText;
-
-            starsLink.textContent = starsBadgeText;
-            starsLink.target = "_blank";
-            starsLink.href = repoLinkEl.href;
-
-            repoLinkEl.parentNode.appendChild(starsBadge);
-        }
+        const badgeElements = createBadgeElements(repoLinkList);
+        const starsList = await Promise.all(repoLinkList.map(async repoLink => await fetchGithubRepoStars(repoLink)));
+        badgeElements.map((badge, i) => {
+            badge.querySelector("a").innerText = starsList[i]
+        });
+        repoLinkList.forEach((repoLink, i) => repoLink.parentElement.appendChild(badgeElements[i]));
     };
 
     addGithubRepoStarBadgesToPkgResults();
