@@ -40,16 +40,25 @@
         return githubRepoHomepages;
     };
 
-    async function fetchGithubRepoStars(ghRepoLink) {
+    async function fetchRepoStars(ghRepoLink) {
         const
             repoUrl = ghRepoLink.href,
             apiUrl = new URL(`https://api.github.com/repos${repoUrl.replace("https://github.com", "")}`),
             response = await fetch(apiUrl),
-            data = await response.json(),
-            gazers = data.stargazers_count;
+            data = await response.json();
 
-        return `⭐️ ${gazers || "???"}`;
+        return `⭐️ ${data.stargazers_count||"???"}`;
     };
+
+    async function getAllStars(repoLinkList, batchSize = 3) {
+        const stars = [];
+        for (let i = 0; i < repoLinkList.length; i += (i + batchSize < repoLinkList.length) ? batchSize : (i + batchSize - repoLinkList.length)) {
+            const batch = repoLinkList.slice(i, i + batchSize);
+            const batchStars = await Promise.all(batch.map(async repoLink => await fetchRepoStars(repoLink)));
+            stars.push(...batchStars);
+        }
+        return stars;
+    }
 
     const createBadgeElements = repoLinkList => repoLinkList.map(repoLink => {
         const starsBadge = document.createElement("li"), starsLink = document.createElement("a");
@@ -64,7 +73,8 @@
     async function main() {
         const repoLinkList = await pkgsWithGhRepoHomepages();
         const badgeElements = createBadgeElements(repoLinkList);
-        const starsList = await Promise.all(repoLinkList.map(async repoLink => await fetchGithubRepoStars(repoLink)));
+        const starsList = await getAllStars(repoLinkList);
+
         badgeElements.map((badge, i) => {
             badge.querySelector("a").innerText = starsList[i]
         });
