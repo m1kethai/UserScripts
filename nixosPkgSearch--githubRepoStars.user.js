@@ -61,10 +61,8 @@
         return starsBadge;
     });
 
-    async function addGithubRepoStarBadgesToPkgResults() {
+    async function main() {
         const repoLinkList = await pkgsWithGhRepoHomepages();
-        // debugger;
-
         const badgeElements = createBadgeElements(repoLinkList);
         const starsList = await Promise.all(repoLinkList.map(async repoLink => await fetchGithubRepoStars(repoLink)));
         badgeElements.map((badge, i) => {
@@ -73,5 +71,5 @@
         repoLinkList.forEach((repoLink, i) => repoLink.parentElement.appendChild(badgeElements[i]));
     };
 
-    addGithubRepoStarBadgesToPkgResults();
+    main();
 })();
