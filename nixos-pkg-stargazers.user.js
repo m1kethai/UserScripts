@@ -5,6 +5,7 @@
 // @version      1.3
 // @description  Show the # of GitHub repo stars for every applicable NixOS package. Since this only fetches the stargazers count via GitHub's public API at the moment, there's a rate limit of 60 requests/hr.
 // @author       m1kethai
+// @license      MIT
 // @match        https://search.nixos.org/packages*query*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nixos.org
 // @grant        none
