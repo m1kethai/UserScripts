@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         NixOS Package Search - Add a GitHub Stargazers badge to every package in the search results with a GH repo "Homepage" URL
+// @name         NixOS Package Search: GitHub Stargazers badge for every package in results with a GH repo "Homepage"
 // @namespace    https://github.com/m1kethai/UserScripts
 // @supportURL   https://github.com/m1kethai/UserScripts
 // @version      1.3
