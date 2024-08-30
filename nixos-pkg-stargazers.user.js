@@ -3,7 +3,7 @@
 // @namespace    https://github.com/m1kethai/UserScripts
 // @supportURL   https://github.com/m1kethai/UserScripts
 // @version      1.2
-// @description  Adds a badge displaying the number of GitHub repo stars for every Nix package (with a GitHub repo "Homepage") returned in the package search results.
+// @description  Adds a badge displaying the number of GitHub repo stars for every Nix package (with a GitHub repo "Homepage") returned in the package search results. Since this currently only fetches the stargazer count via GitHub's public API, there's a rate limit of 60 requests/hour/IP.
 // @author       m1kethai
 // @match        https://search.nixos.org/packages*query*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nixos.org
