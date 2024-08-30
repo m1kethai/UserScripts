@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         NixOS Package Search - GitHub repo stargazers badges for package search results
+// @name         NixOS Package Search - Add a GitHub Stargazers badge to every package in the search results with a GH repo "Homepage" URL
 // @namespace    https://github.com/m1kethai/UserScripts
 // @supportURL   https://github.com/m1kethai/UserScripts
-// @version      1.2
-// @description  Adds a badge displaying the number of GitHub repo stars for every Nix package (with a GitHub repo "Homepage") returned in the package search results. Since this currently only fetches the stargazer count via GitHub's public API, there's a rate limit of 60 requests/hour/IP.
+// @version      1.3
+// @description  Show the # of GitHub repo stars for every applicable NixOS package. Since this only fetches the stargazers count via GitHub's public API at the moment, there's a rate limit of 60 requests/hr.
 // @author       m1kethai
 // @match        https://search.nixos.org/packages*query*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nixos.org
