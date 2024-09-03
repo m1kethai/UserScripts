@@ -2,13 +2,15 @@
 // @name         NixOS Package Search: GitHub Stargazers badge for every package in results with a GH repo "Homepage"
 // @namespace    https://github.com/m1kethai/UserScripts
 // @supportURL   https://github.com/m1kethai/UserScripts
-// @version      1.3
+// @version      [DEV]-2.0.0
 // @description  Show the # of GitHub repo stars for every applicable NixOS package. Since this only fetches the stargazers count via GitHub's public API at the moment, there's a rate limit of 60 requests/hr.
 // @author       m1kethai
 // @license      MIT
 // @match        https://search.nixos.org/packages*query*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nixos.org
 // @grant        none
+// @downloadURL https://update.greasyfork.org/scripts/505936/NixOS%20Package%20Search%3A%20GitHub%20Stargazers%20badge%20for%20every%20package%20in%20results%20with%20a%20GH%20repo%20%22Homepage%22.user.js
+// @updateURL https://update.greasyfork.org/scripts/505936/NixOS%20Package%20Search%3A%20GitHub%20Stargazers%20badge%20for%20every%20package%20in%20results%20with%20a%20GH%20repo%20%22Homepage%22.meta.js
 // ==/UserScript==
 
 (function() {
@@ -42,15 +44,18 @@
     }
 
     async function fetchGithubRepoStars(ghRepoLink) {
+        const localToken = (localStorage.ght || null);
         try {
-            const
-                repoUrl = ghRepoLink.href,
-                apiUrl = new URL(`https://api.github.com/repos${repoUrl.replace("https://github.com", "")}`),
-                response = await fetch(apiUrl),
-                data = await response.json(),
-                gazers = data.stargazers_count;
-
+            const repoUrl = ghRepoLink.href;
+            const apiUrl = new URL(`https://api.github.com/repos${repoUrl.replace("https://github.com", "")}`);
+            const response = (localToken !== null)
+            ? await fetch(apiUrl, {
+                headers: {'Authorization': `token ${localToken}`}
+            }) : await fetch(apiUrl);
+            const data = await response.json();
+            const gazers = data.stargazers_count;
             return `⭐️ ${gazers || "???"}`;
+
         } catch (error) {
             console.error("Failed to fetch stars:", error);
             return `⭐️ ???`;
