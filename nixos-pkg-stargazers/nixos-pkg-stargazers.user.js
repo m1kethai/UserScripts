@@ -1,16 +1,14 @@
 // ==UserScript==
-// @name         NixOS Package Search: GitHub Stargazers badge for every package in results with a GH repo "Homepage"
+// @name         NixOS Package Search: GitHub Stargazers badge for all relevant packages
 // @namespace    https://github.com/m1kethai/UserScripts
 // @supportURL   https://github.com/m1kethai/UserScripts
-// @version      [DEV]-2.0.0
-// @description  Show the # of GitHub repo stars for every applicable NixOS package. Since this only fetches the stargazers count via GitHub's public API at the moment, there's a rate limit of 60 requests/hr.
+// @version      1.4
+// @description  Adds a GitHub Stargazers (# of GH repo stars) badge/link to every applicable nixpkg (all the ones with a GH repo "Homepage") returned in the search results. Optionally supply your own API token in localStorage (key: `userscript_gh_token`) to bypass the default 60 requests/min rate limit.
 // @author       m1kethai
 // @license      MIT
 // @match        https://search.nixos.org/packages*query*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nixos.org
 // @grant        none
-// @downloadURL https://update.greasyfork.org/scripts/505936/NixOS%20Package%20Search%3A%20GitHub%20Stargazers%20badge%20for%20every%20package%20in%20results%20with%20a%20GH%20repo%20%22Homepage%22.user.js
-// @updateURL https://update.greasyfork.org/scripts/505936/NixOS%20Package%20Search%3A%20GitHub%20Stargazers%20badge%20for%20every%20package%20in%20results%20with%20a%20GH%20repo%20%22Homepage%22.meta.js
 // ==/UserScript==
 
 (function() {
@@ -38,13 +36,11 @@
         const homepageLinkSelector = `div.search-page.success > div.search-results > div > ul > li.package > ul > li > a`;
         const homepageLinks = document.querySelectorAll(homepageLinkSelector);
         const githubRepoHomepages = Array.from(homepageLinks).filter(link => link.innerText.includes("Homepage") && link.href.includes("github.com") && !link.href.includes("blob"));
-
-        console.info(`🚀 ~ githubRepoHomepages:`, githubRepoHomepages)
         return githubRepoHomepages;
     }
 
     async function fetchGithubRepoStars(ghRepoLink) {
-        const localToken = (localStorage.ght || null);
+        const localToken = (localStorage.userscript_gh_token || null);
         try {
             const repoUrl = ghRepoLink.href;
             const apiUrl = new URL(`https://api.github.com/repos${repoUrl.replace("https://github.com", "")}`);
