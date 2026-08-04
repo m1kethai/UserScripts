@@ -1,9 +1,9 @@
-# UserScripts
+# userscripts
 
 ## Project Overview
-This repository contains a collection of custom JavaScript UserScripts designed to be used with browser extensions like Tampermonkey, Greasemonkey, or Violentmonkey. These scripts enhance the functionality and UI of various websites.
+This repository contains a collection of custom public userscripts designed to be used with browser extensions like Tampermonkey, Greasemonkey, or Violentmonkey. These scripts enhance the functionality and UI of various websites.
 
-Currently, the project includes the following script(s):
+Currently, the project includes the following userscripts:
 - **NixOS Package Search Stargazers (`nixos-pkg-stargazers/`)**: A script that fetches and displays the GitHub repository star count for packages on the NixOS package search page (`https://search.nixos.org/packages`). It uses the GitHub public API to retrieve the stargazer counts.
 
 ## Building and Running
